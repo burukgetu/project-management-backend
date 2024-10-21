@@ -89,7 +89,7 @@ const deleteTask = async (req, res) => {
       return res.status(403).json({ message: 'Unauthorized' });
     }
 
-    await task.remove();
+    await Task.findByIdAndDelete(id);
     res.status(200).json({ message: 'Task deleted' });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
