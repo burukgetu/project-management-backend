@@ -2,6 +2,7 @@ const File = require('../models/File');
 const Task = require('../models/Task');
 const path = require('path');
 const fs = require('fs');
+const { createNotification } = require('./notificationController');
 
 // Upload a file
 const uploadFile = async (req, res) => {
@@ -23,6 +24,9 @@ const uploadFile = async (req, res) => {
 
     await newFile.save();
     res.status(201).json(newFile);
+
+    // After saving the new file in the `uploadFile` function
+    await createNotification(newFile.uploadedBy, `File uploaded to task: ${existingTask.title}`, existingTask._id);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }

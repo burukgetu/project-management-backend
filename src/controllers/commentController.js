@@ -1,5 +1,6 @@
 const Comment = require('../models/Comment');
 const Task = require('../models/Task');
+const { createNotification } = require('./notificationController');
 
 // Create a new comment
 const createComment = async (req, res) => {
@@ -19,6 +20,9 @@ const createComment = async (req, res) => {
 
     await newComment.save();
     res.status(201).json(newComment);
+
+    // After saving the new comment in the `createComment` function
+  await createNotification(existingTask.assignedTo, `New comment added to task: ${existingTask.title}`, existingTask._id);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
